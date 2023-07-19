@@ -1,0 +1,41 @@
+﻿@model IEnumerable<DataModels.Note>
+
+@{
+}
+
+<div class="mt-2" style="width:50%">
+    <div class="row">
+        <h2>Нотатки</h2>
+        <div class="col-md-4">
+            <a href="/Note/AddNote" class="btn btn-primary">Add Note</a>
+        </div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Назва нотатки</th>
+                    <th>Опис</th>
+                    <th>Дата створення</th>
+                    <th>Змінити</th>
+                </tr>
+
+                @foreach (var note in Model)
+                {
+                    <tr>
+                        <td>
+                            @note.Name
+                        </td>
+                        <td>@note.Description</td>
+                        <td>
+                            @note.Created
+                        </td>
+                        <td>
+                            <a class="btn btn-success" href="/Note/EditNotes?id=@note.Id">Edit</a>
+                            <a class="btn btn-danger" href="/Note/DeleteNotes?id=@note.Id">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </thead>
+        </table>
+    </div>
+
+</div>
