@@ -17,7 +17,7 @@ namespace MyOwnNotes1407.Controllers
         public NoteController(ApplicationDbContext ctx)
         {
             _ctx = ctx;
-        }     
+        }
         public IActionResult AddNote()
         {
             return View();
@@ -49,7 +49,6 @@ namespace MyOwnNotes1407.Controllers
             var note = await _ctx.Notes.FindAsync(id);
             return View(note);
         }
-
         [HttpPost]
         public async Task<IActionResult> EditNotesAsync(Note note)
         {
@@ -59,6 +58,7 @@ namespace MyOwnNotes1407.Controllers
             }
             try
             {
+                note.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 _ctx.Notes.Update(note);
                 await _ctx.SaveChangesAsync();
                 return RedirectToAction("NoteShowEdit");
@@ -70,7 +70,6 @@ namespace MyOwnNotes1407.Controllers
             }
 
         }
-
         public async Task<IActionResult> DeleteNotesAsync(long id)
         {
             try
@@ -90,63 +89,69 @@ namespace MyOwnNotes1407.Controllers
             return RedirectToAction("NoteShowEdit");
 
         }
-
-        public IActionResult NotePaginSort(string term = "", string orderBy = "", int currentPage = 1)
+        public IActionResult NotePaginSort(string userId = "", string term = "", string orderBy = "", int currentPage = 1)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            term = string.IsNullOrEmpty(term) ? "" : term.ToLower();
-            var empData = new NoteViewModel();
-            // we are toggling order cases
-            
-            //empData.NameSortOrder = string.IsNullOrEmpty(orderBy) ? "note_desc" : "";
+                term = string.IsNullOrEmpty(term) ? "" : term.ToLower();
+                var empData = new NoteViewModel();
+                // we are toggling order cases
 
-            empData.NameSortOrder = orderBy == "name" ? "name_desc" : "name";
+                //empData.NameSortOrder = string.IsNullOrEmpty(orderBy) ? "note_desc" : "";
 
-            empData.CreatedSortOrder = orderBy == "created" ? "created_desc" : "created";
+                empData.NameSortOrder = orderBy == "name" ? "name_desc" : "name";
 
-            var notes = (from emp in _ctx.Notes
-                             where term == "" || emp.Name.ToLower().StartsWith(term) && emp.UserId == userId
+                empData.CreatedSortOrder = orderBy == "created" ? "created_desc" : "created";
+
+                var notes = (from emp in _ctx.Notes
+                             where/* term == "" || emp.Name.ToLower().StartsWith(term) && */emp.UserId == userId
                              select new Note
                              {
                                  Id = emp.Id,
                                  Name = emp.Name,
                                  Description = emp.Description,
-                                 Created = emp.Created
+                                 Created = emp.Created,
+                                 UserId = emp.UserId
                              }
-                            );
-            switch (orderBy)
-            {
-                case "name_desc":
-                    notes = notes.OrderByDescending(a => a.Name);
-                    break;
-                case "created_desc":
-                    notes = notes.OrderByDescending(a => a.Created);
-                    break;
-                case "name":
-                    notes = notes.OrderBy(a => a.Name);
-                    break;
-                default:
-                    notes = notes.OrderBy(a => a.Created);
-                    break;
-            }
-            int totalRecords = notes.Count();
-            int pageSize = 5;
-            int totalPages = (int)Math.Ceiling(totalRecords / (double)pageSize);
-            notes = notes.Skip((currentPage - 1) * pageSize).Take(pageSize);
-            // current=1, skip= (1-1=0), take=5 
-            // currentPage=2, skip (2-1)*5 = 5, take=5 ,
-            empData.Notes =  notes;
-            empData.CurrentPage = currentPage;
-            empData.TotalPages = totalPages;
-            empData.Term = term;
-            empData.PageSize = pageSize;
-            empData.OrderBy = orderBy;
-            return View(empData);
-        }
-        
-            public IActionResult NoteShowEdit(string term = "", string orderBy = "", int currentPage = 1)
+                                );
+
+                switch (orderBy)
+                {
+                    case "name_desc":
+                        notes = notes.OrderByDescending(a => a.Name);
+                        break;
+                    case "created_desc":
+                        notes = notes.OrderByDescending(a => a.Created);
+                        break;
+                    case "name":
+                        notes = notes.OrderBy(a => a.Name);
+                        break;
+                    default:
+                        notes = notes.OrderBy(a => a.Created);
+                        break;
+                }
+                int totalRecords = notes.Count();
+                int pageSize = 5;
+                int totalPages = (int)Math.Ceiling(totalRecords / (double)pageSize);
+                notes = notes.Skip((currentPage - 1) * pageSize).Take(pageSize);
+                // current=1, skip= (1-1=0), take=5 
+                // currentPage=2, skip (2-1)*5 = 5, take=5 ,
+
+                empData.Notes = notes.ToList();
+                empData.CurrentPage = currentPage;
+                empData.TotalPages = totalPages;
+                empData.Term = term;
+                empData.PageSize = pageSize;
+                empData.OrderBy = orderBy;
+
+                return View(empData);
+            
+            
+        }        
+         public IActionResult NoteShowEdit(string userId = "", string term = "", string orderBy = "", int currentPage = 1)
         {
+            userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             term = string.IsNullOrEmpty(term) ? "" : term.ToLower();
             var empData = new NoteViewModel();
             // we are toggling order cases
@@ -154,12 +159,13 @@ namespace MyOwnNotes1407.Controllers
             empData.CreatedSortOrder = orderBy == "created" ? "created_desc" : "created";
 
             var notes = (from emp in _ctx.Notes
-                         where term == "" || emp.Name.ToLower().StartsWith(term)
+                         where/* term == "" || emp.Name.ToLower().StartsWith(term) &&*/ emp.UserId == userId
                          select new Note
                          {
                              Id = emp.Id,
                              Name = emp.Name,
-                             Created = emp.Created
+                             Created = emp.Created,
+                             UserId = emp.UserId
                          }
                             );
             switch (orderBy)
@@ -183,7 +189,7 @@ namespace MyOwnNotes1407.Controllers
             notes = notes.Skip((currentPage - 1) * pageSize).Take(pageSize);
             // current=1, skip= (1-1=0), take=5 
             // currentPage=2, skip (2-1)*5 = 5, take=5 ,
-            empData.Notes = notes;
+            empData.Notes =   notes.ToList();
             empData.CurrentPage = currentPage;
             empData.TotalPages = totalPages;
             empData.Term = term;

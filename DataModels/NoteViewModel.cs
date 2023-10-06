@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Channels;
-using System.Threading.Tasks;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DataModels
 {
-   public class NoteViewModel
+    public class NoteViewModel
     {
-        public IQueryable<Note> Notes { get; set; }
+        //public string? UserNId { get; set; }
+        public List<Note> Notes { get; set; }
         public string NameSortOrder { get; set; }
         public string CreatedSortOrder { get; set; }
         public int PageSize { get; set; }
