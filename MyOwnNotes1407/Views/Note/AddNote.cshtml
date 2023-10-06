@@ -2,29 +2,68 @@
 @{
     //Layout = "_Layout";
 }
+<h4 class="mb-3 text-muted">Створення нотатки</h4>
+<form id="createTaskForm">
 <div class="mt-2" style="width:50%">
     <form asp-action="AddNote">
-        <h2>My Note</h2>
+  @*      <h2>My Note</h2>*@
         <div class="mb-3">
-            <label asp-for="Name" class="form-label">Name</label>
+            <label asp-for="Name" class="form-label">Нотатка</label>
             <input asp-for="Name" type="text" class="form-control">
             <span class="text-danger" asp-validation-for="Name"></span>
         </div>
 
         <div class="mb-3">
-            <label asp-for="Description" class="form-label">Description</label>
-            <textarea name="description" type="text" class="form-control" rows="3"></textarea>         
+            <label asp-for="Description" class="form-label">Деталі запису</label>
+            <textarea name="description" type="text" class="form-control" rows="3"></textarea>
             <span class="text-danger" asp-validation-for="Description"></span>
         </div>
 
 
         <div class="mb-3">
-            <label asp-for="Created" class="control-label">Created</label>
+            <label asp-for="Created" class="control-label">Дата створення</label>
             <input asp-for="Created" class="form-control" type="date" value="05.06.2023" />
             <span asp-validation-for=" Created" class="text-danger"></span>
         </div>
 
-        <button type="submit" class="btn btn-primary">Submit</button>
-        <a href="/Note/DisplayNotes" class="btn btn-primary">All Notes</a>
+        <button id="createTask" type="submit" class="btn btn-primary">Створити</button>
+        <a href="/Note/DisplayNotes" class="btn btn-primary">Всі нотатки</a>
     </form>
+
 </div>
+</form>
+
+
+
+@section Scripts
+    {
+    <script type="text/javascript" src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+
+        $('#createTask').on('click', function (e) {
+            e.preventDefault();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("AddNote", "Note")',
+                data: $('#createTaskForm').serialize(),
+                success: function (response) {
+                    Swal.fire({
+                        title: 'Нотатку створено',
+                        text: response.description,
+                        icon: 'success',
+                        confirmButtonText: 'Окей'
+                    })
+                },
+                error: function (response) {
+                    Swal.fire({
+                        title: 'Інформація',
+                        text: response.responseJSON.description,
+                        icon: 'error',
+                        confirmButtonText: 'Окей'
+                    })
+                }
+            })
+        });
+    </script>
+}

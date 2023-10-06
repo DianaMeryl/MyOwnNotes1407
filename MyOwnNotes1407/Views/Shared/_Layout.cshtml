@@ -24,9 +24,15 @@
                         </li>      
                         @if (User.Identity.IsAuthenticated)
                         {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Note" asp-action="AddNote">Notes</a>
+                             <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Note" asp-action="NoteShowEdit">Мої нотатки</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Note" asp-action="NotePaginSort">Опис та Пошук</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Note" asp-action="AddNote">Створити нотатку</a>
+                            </li>                  
                         }
                         @if (User.IsInRole("Admin"))
                         {

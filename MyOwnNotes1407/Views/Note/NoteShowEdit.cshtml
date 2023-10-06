@@ -1,0 +1,223 @@
+﻿@model DataModels.NoteViewModel
+
+@{
+}
+
+<div class="mt-2" style="width:50%">
+    <div class="row">
+        <h2><b><em>Нотатки</em></b></h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        <h4>Назва нотатки</h4>
+                    </th>                
+                    <th>
+                        <h4>Дата створення</h4>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var emp in Model.Notes)
+                {
+                    <tr>
+                        <td>
+                            @emp.Name
+                        </td>                      
+                        <td>
+                            @emp.Created
+                        </td>
+                        <td>
+                            <a class="btn btn-success" href="/Note/EditNotes?id=@emp.Id">Редагувати</a>
+                            <a class="btn btn-danger" href="/Note/DeleteNotes?id=@emp.Id">Видалити</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            @if (Model.CurrentPage > 1)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="/Note/NoteShowEdit?term=@Model.Term&orderBy=@Model.OrderBy&currentPage=@(Model.CurrentPage-1)" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            }
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                if (i == Model.CurrentPage)
+                {
+                    <li class="page-item"><a class="page-link active" href="/Note/NoteShowEdit?term=@Model.Term&orderBy=@Model.OrderBy&currentPage=@i"> @i</a></li>
+                }
+                else
+                {
+                    <li class="page-item"><a class="page-link" href="/Note/NoteShowEdit?term=@Model.Term&orderBy=@Model.OrderBy&currentPage=@i"> @i</a></li>
+                }
+            }
+            @if (Model.CurrentPage < Model.TotalPages)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="/Note/NoteShowEdit?term=@Model.Term&orderBy=@Model.OrderBy&currentPage=@(Model.CurrentPage+1)" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            }
+        </ul>
+    </nav>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@*
+
+@model IEnumerable<DataModels.Note>
+
+@{
+}
+
+<div class="mt-2" style="width:50%">
+    <div class="row">
+        <h2>Нотатки</h2>
+        <div class="col-md-4">
+            <a href="/Note/AddNote" class="btn btn-primary">Додати нову нотатку</a>
+        </div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Назва нотатки</th>
+                    <th>Опис</th>
+                    <th>Дата створення</th>
+                    <th>Змінити</th>
+                </tr>
+                @foreach (var note in Model)
+                {
+                    <tr>
+                        <td>
+                            @note.Name
+                        </td>
+                        <td>@note.Description</td>
+                        <td>
+                            @note.Created
+                        </td>
+                        <td>
+                            <a class="btn btn-success" href="/Note/EditNotes?id=@note.Id">Редагувати</a>
+                            <a class="btn btn-danger"  href="/Note/DeleteNotes?id=@note.Id">Видалити</a>
+                        </td>
+                    </tr>
+                }
+            </thead>
+        </table>
+    </div>
+
+</div>
+
+
+
+*@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@*
+    <script type="text/javascript" src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <script>
+        const btn = document.getElementById('btn');
+
+        btn.addEventListener('click', () => {
+            Swal.fire({
+                title: 'Ви впевнені?',
+                icon: 'info',
+                text:'Видалено',
+                showCancelButton: true,
+                confirmButtonText:'Так',
+                cancelButtonText:'Відмінити',
+                confirmButtonColor: 'green',
+                cancelButtonColor: 'red'
+            }).then((result) => {
+                if (result.isConfirmed)
+                {
+                    Swal.fire({
+                        title: 'Успішно видалено',
+                        icon: 'success'
+                });
+                }
+                else if (result.isDenied)
+                {
+                    Swal.fire({
+                        title: 'Наступного разу',
+                        icon: 'error'
+                    });
+                }
+                else {
+                    Swal.fire({
+                        title: 'Подумайте ще',
+                        icon: 'question',
+                        html: 'I will close in <b></b> milliseconds',
+                        timer: 5000,
+                        timerProgressBar: true,
+
+                        didOpen: () => {
+                            Swal.showLoading() 
+                            const b = Swal.getHtmlContainer().querySelector('b')
+                            timerInterval = setInterval (() => {
+                                b.textContent = Swal.getTimerLeft()
+                            }, 100)
+                        }
+                    });
+                }
+            });
+        });
+    </script>*@

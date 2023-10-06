@@ -1,4 +1,6 @@
-﻿namespace DataModels
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace DataModels
 {
     public class Note
     {
@@ -12,9 +14,14 @@
 
         public DateTime Created { get; set; }
 
+        public string UserId { get; set; }
+
+
+
         //public string UserId { get; set; }
 
-      //  public ApplicationUser ApplicationUsers { get; set; }
+        //  public ApplicationUser ApplicationUsers { get; set; }
 
     }
+
 }

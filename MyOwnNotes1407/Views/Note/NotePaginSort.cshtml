@@ -1,0 +1,105 @@
+﻿@model DataModels.NoteViewModel
+
+@{
+}
+
+    <div class="mt-2" style="width:50%">
+        <div class="row">
+            <h2>Нотатки</h2>
+        <form asp-action="NotePaginSort">
+            <div class="row">
+                <div class="col-md-8">
+                    <input name="term" class="form-control" placeholder="Search by name" />
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-info">Пошук</button>
+                </div>
+            </div>
+        </form>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        <br />
+                        <h5>Сортувати по:</h5>
+                    </th>
+                    <th>
+                        <a href="/Note/NotePaginSort?orderBy=@Model.NameSortOrder">Назва нотатки</a>
+                        <br />
+                    </th>
+                    <th>
+                        <a href="/Note/NotePaginSort?orderBy=@Model.CreatedSortOrder">   Дата створення</a>
+                        <br />
+                    </th>
+                </tr>
+            </thead>
+        </table>
+        <br/>
+        <br />
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        <h4>Назва нотатки</h4>
+                    </th>
+                    <th>
+                        <h4>Опис</h4>
+                    </th>
+                    <th>
+                        <h4>Дата створення</h4>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+             
+                    @foreach (var emp in Model.Notes)
+                    {
+                        <tr>
+                            <td>
+                            @emp.Name
+                            </td>
+                            <td>
+                            @emp.Description
+                            </td>
+                            <td>
+                            @emp.Created
+                            </td>                    
+                        </tr>
+                    }
+            </tbody>
+        </table>
+    </div>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            @if (Model.CurrentPage > 1)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="/Note/NotePaginSort?term=@Model.Term&orderBy=@Model.OrderBy&currentPage=@(Model.CurrentPage-1)" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            }
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                if (i == Model.CurrentPage)
+                {
+                    <li class="page-item"><a class="page-link active" href="/Note/NotePaginSort?term=@Model.Term&orderBy=@Model.OrderBy&currentPage=@i"> @i</a></li>
+                }
+                else
+                {
+                    <li class="page-item"><a class="page-link" href="/Note/NotePaginSort?term=@Model.Term&orderBy=@Model.OrderBy&currentPage=@i"> @i</a></li>
+                }
+            }
+            @if (Model.CurrentPage < Model.TotalPages)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="/Note/NotePaginSort?term=@Model.Term&orderBy=@Model.OrderBy&currentPage=@(Model.CurrentPage+1)" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            }
+        </ul>
+    </nav>
+</div>
