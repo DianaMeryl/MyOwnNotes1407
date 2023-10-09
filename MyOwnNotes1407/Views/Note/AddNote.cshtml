@@ -2,11 +2,14 @@
 @{
     //Layout = "_Layout";
 }
+<div class="basebody">
+
+
 <h4 class="mb-3 text-muted">Створення нотатки</h4>
 <form id="createTaskForm">
-<div class="mt-2" style="width:50%">
+<div class="mt-2" style="width:90%">
     <form asp-action="AddNote">
-  @*      <h2>My Note</h2>*@
+
         <div class="mb-3">
             <label asp-for="Name" class="form-label">Нотатка</label>
             <input asp-for="Name" type="text" class="form-control">
@@ -34,6 +37,7 @@
 </form>
 
 
+</div>
 
 @section Scripts
     {

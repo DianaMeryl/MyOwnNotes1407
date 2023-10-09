@@ -91,9 +91,10 @@ namespace MyOwnNotes1407.Controllers
         }
         public IActionResult NotePaginSort(string userId = "", string term = "", string orderBy = "", int currentPage = 1)
         {
-                userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                userId = User.FindFirstValue(ClaimTypes.NameIdentifier);           
 
-                term = string.IsNullOrEmpty(term) ? "" : term.ToLower();
+               term = string.IsNullOrEmpty(term) ? "" : term.ToLower();
+
                 var empData = new NoteViewModel();
                 // we are toggling order cases
 
@@ -105,6 +106,7 @@ namespace MyOwnNotes1407.Controllers
 
                 var notes = (from emp in _ctx.Notes
                              where/* term == "" || emp.Name.ToLower().StartsWith(term) && */emp.UserId == userId
+                             where term == "" || emp.Name.ToLower().StartsWith(term) 
                              select new Note
                              {
                                  Id = emp.Id,

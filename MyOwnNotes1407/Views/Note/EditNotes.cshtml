@@ -1,7 +1,10 @@
 ﻿@model DataModels.Note;
 @{
 }
-<div class="mt-2" style="width:50%">
+
+<div class="basebody">
+
+<div class="mt-2" style="width:90%">
     <form asp-action="EditNotes">
         <input asp-for="Id" type="hidden" class="form-control">
 
@@ -21,4 +24,5 @@
         <button type="submit" class="btn btn-primary">Update</button>
         <a href="/Note/DisplayNotes" class="btn btn-primary">Back</a>
     </form>
+</div>
 </div>

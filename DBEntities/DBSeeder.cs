@@ -28,7 +28,7 @@ namespace DBEntities
             var userInDb = await userManager.FindByEmailAsync(user.Email);
             if (userInDb == null)
             {
-                await userManager.CreateAsync(user, "Qweasd_12");
+                await userManager.CreateAsync(user, "Qweasd_15");
                 await userManager.AddToRoleAsync(user, Roles.Admin.ToString());
             }
         }
